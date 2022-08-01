@@ -1,0 +1,1059 @@
+# © 2022 SAP SE or an SAP affiliate company. All rights reserved.
+openapi: "3.0.0"
+info:
+  version: 2206.5.0
+  title: Event Ingestion Service internal API
+servers:
+  - url: "/app/tachyon-service/"
+    description: "Event Ingestion Service"
+paths:
+  # VSYSTEM
+  /service/event:
+    post:
+      operationId: ServiceEvent
+      summary: Receive subscribed vsystem event.
+      requestBody:
+        $ref: '#/components/requestBodies/eventPost'
+      tags:
+        - vsystem
+      responses:
+        '200':
+          description: OK
+  /service/health:
+    get:
+      operationId: ServiceHealth
+      summary: Get the health of the service.
+      tags:
+        - vsystem
+      responses:
+        '200':
+          description: OK
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+  # PRIVATE
+  /service/version:
+    get:
+      operationId: ServiceVersion
+      summary: Get the service API version.
+      tags:
+        - private
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/versionResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+  /service/loglevel:
+    get:
+      operationId: ServiceLogLevelGet
+      summary: Get the service log level.
+      tags:
+        - private
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/loglevelResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+    put:
+      operationId: ServiceLogLevelPut
+      summary: Set the service log level.
+      tags:
+        - private
+      requestBody:
+        $ref: '#/components/requestBodies/loglevelPut'
+      responses:
+        '204':
+          description: No Content
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+  # TASK
+  /api/v1/tasks/:
+    get:
+      operationId: TaskList
+      summary: "Get a list of all the tasks"
+      description: |
+        Lookup API for a list of tasks determined by filter criteria. Currently only supports
+        filtering by `rmsTaskId`.
+      tags: [ task ]
+      security:
+        - policyCheck: ["read"]
+      parameters:
+        # HEADER
+        - $ref: '#/components/parameters/sapPassport-header'
+        - $ref: '#/components/parameters/tenantId-header'
+        - $ref: '#/components/parameters/userId-header'
+        # QUERY
+        - $ref: '#/components/parameters/rmsTaskId-query'
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/taskModelArray'
+        '429':
+          description: "Too Many Requests"
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/RateLimit-Limit'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/RateLimit-Reset'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/RateLimit-Remaining'
+        '500':
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+    post:
+      operationId: TaskCreate
+      summary: "Create a new task"
+      description: |
+        Create a new task. If needed, this will establish the Event Mesh connection to start
+        receiving events and call the LOB API to create a subscription.
+      tags: [ task ]
+      security:
+        - policyCheck: ["write"]
+      parameters:
+        # HEADER
+        - $ref: '#/components/parameters/sapPassport-header'
+        - $ref: '#/components/parameters/tenantId-header'
+        - $ref: '#/components/parameters/userId-header'
+      requestBody:
+        $ref: '#/components/requestBodies/taskPost'
+      responses:
+        '201':
+          description: "Created"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/taskModel'
+        '401':
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '409':
+          description: "Conflict"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '429':
+          description: "Too Many Requests"
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/RateLimit-Limit'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/RateLimit-Reset'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/RateLimit-Remaining'
+        '500':
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '502':
+          description: "Bad Gateway"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+  /api/v1/tasks/{taskId}:
+    get:
+      operationId: TaskGet
+      summary: "Get a task by `taskId`"
+      description: |
+        Return the task definition for the given `taskId`.
+      tags: [ task ]
+      security:
+        - policyCheck: ["read"]
+      parameters:
+        # HEADER
+        - $ref: '#/components/parameters/sapPassport-header'
+        - $ref: '#/components/parameters/tenantId-header'
+        - $ref: '#/components/parameters/userId-header'
+        # PATH
+        - $ref: '#/components/parameters/taskId-path'
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/taskModel'
+        '403':
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '404':
+          description: "Not Found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '429':
+          description: "Too Many Requests"
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/RateLimit-Limit'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/RateLimit-Reset'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/RateLimit-Remaining'
+        '500':
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+    delete:
+      operationId: TaskDelete
+      summary: "Delete a task by `taskId`"
+      description: |
+        Terminate the task by `taskId` and delete all corresponding open batches. If necessary
+        this will call the LOB API to delete the export and terminate the subscription. If this
+        was the last task for the given connection, this will also close the corresponding
+        Event Mesh connection.
+      tags: [ task ]
+      security:
+        - policyCheck: ["write"]
+      parameters:
+        # HEADER
+        - $ref: '#/components/parameters/sapPassport-header'
+        - $ref: '#/components/parameters/tenantId-header'
+        - $ref: '#/components/parameters/userId-header'
+        # PATH
+        - $ref: '#/components/parameters/taskId-path'
+      responses:
+        '204':
+          description: "No Content"
+        '403':
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '404':
+          description: "Not Found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '429':
+          description: "Too Many Requests"
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/RateLimit-Limit'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/RateLimit-Reset'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/RateLimit-Remaining'
+        '500':
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+  # BATCH
+  /api/v1/tasks/{taskId}/batches/:
+    get:
+      operationId: BatchList
+      summary: "Get a list of all the batches for task `taskId`"
+      description: |
+        Lookup API for a list of batches determined by filter criteria. Currently only supports
+        filtering by `batchType`.
+      tags: [ batch ]
+      security:
+        - policyCheck: ["read"]
+      parameters:
+        # HEADER
+        - $ref: '#/components/parameters/sapPassport-header'
+        - $ref: '#/components/parameters/tenantId-header'
+        - $ref: '#/components/parameters/userId-header'
+        # PATH
+        - $ref: '#/components/parameters/taskId-path'
+        # QUERY
+        - $ref: '#/components/parameters/batchType-query'
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/batchResponseArray'
+        '403':
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '404':
+          description: "Not Found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '429':
+          description: "Too Many Requests"
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/RateLimit-Limit'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/RateLimit-Reset'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/RateLimit-Remaining'
+        '500':
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+    post:
+      operationId: BatchCreate
+      summary: "Create a new batch for task `taskId`"
+      description: |
+        Creates a new batch for task `taskId` depending on the `batchType`. Note that for
+        batchType `export` only a single batch can be created!
+
+        For batchType `delta` a batch with status `created` is always returned with data from
+        the event buffer. If the data is empty, the reader should suspend the transfer.
+
+        For batchType `export` a batch with status `pending` is returned and the LOB API is
+        triggered to start an export. The status of this export can be queried using the
+        `BatchGet` API.
+      tags: [ batch ]
+      security:
+        - policyCheck: ["write"]
+      parameters:
+        # HEADER
+        - $ref: '#/components/parameters/sapPassport-header'
+        - $ref: '#/components/parameters/tenantId-header'
+        - $ref: '#/components/parameters/userId-header'
+        # PATH
+        - $ref: '#/components/parameters/taskId-path'
+      requestBody:
+        $ref: '#/components/requestBodies/batchPost'
+      responses:
+        '201':
+          description: "Created"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/batchWithDataResponse'
+        '403':
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '404':
+          description: "Not Found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '429':
+          description: "Too Many Requests"
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/RateLimit-Limit'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/RateLimit-Reset'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/RateLimit-Remaining'
+        '500':
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '504':
+          description: "Gateway Timeout"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+  /api/v1/tasks/{taskId}/batches/{batchId}:
+    get:
+      operationId: BatchGet
+      summary: "Get a batch `batchId` for task `taskId`"
+      description: |
+        Return the batch definition for the given `batchId`. This can be used to get the status
+        for a previously created batch, and to query the progress of an batchType `export`
+        batch.
+      tags: [ batch ]
+      security:
+        - policyCheck: ["read"]
+      parameters:
+        # HEADER
+        - $ref: '#/components/parameters/sapPassport-header'
+        - $ref: '#/components/parameters/tenantId-header'
+        - $ref: '#/components/parameters/userId-header'
+        # PATH
+        - $ref: '#/components/parameters/taskId-path'
+        - $ref: '#/components/parameters/batchId-path'
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/batchResponse'
+        '403':
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '404':
+          description: "Not Found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '429':
+          description: "Too Many Requests"
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/RateLimit-Limit'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/RateLimit-Reset'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/RateLimit-Remaining'
+        '500':
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '504':
+          description: "Gateway Timeout"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+    put:
+      operationId: BatchUpdate
+      summary: "Update batch `batchId` for task `taskId`"
+      description: |
+        Updates the status for the given `batchId`. This is primarily intended for delta
+        processing.
+
+        Note: setting a batch to status `committed` has the same effect as deleting it.
+      tags: [ batch ]
+      security:
+        - policyCheck: ["write"]
+      parameters:
+        # HEADER
+        - $ref: '#/components/parameters/sapPassport-header'
+        - $ref: '#/components/parameters/tenantId-header'
+        - $ref: '#/components/parameters/userId-header'
+        # PATH
+        - $ref: '#/components/parameters/taskId-path'
+        - $ref: '#/components/parameters/batchId-path'
+      requestBody:
+        $ref: '#/components/requestBodies/batchPut'
+      responses:
+        '200':
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/batchResponse'
+        '403':
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '404':
+          description: "Not Found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '429':
+          description: "Too Many Requests"
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/RateLimit-Limit'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/RateLimit-Reset'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/RateLimit-Remaining'
+        '500':
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '504':
+          description: "Gateway Timeout"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+    delete:
+      operationId: BatchDelete
+      summary: "Delete a batch by `taskId` and `batchId"
+      description: |
+        Delete the batch with the given `batchId` (the relevant batch must be an `export` batch).
+        This will call the LOB API to delete the exported data.
+      tags: [ batch ]
+      security:
+        - policyCheck: ["write"]
+      parameters:
+        # HEADER
+        - $ref: '#/components/parameters/sapPassport-header'
+        - $ref: '#/components/parameters/tenantId-header'
+        - $ref: '#/components/parameters/userId-header'
+        # PATH
+        - $ref: '#/components/parameters/taskId-path'
+        - $ref: '#/components/parameters/batchId-path'
+      responses:
+        '204':
+          description: "No Content"
+        '403':
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '404':
+          description: "Not Found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '429':
+          description: "Too Many Requests"
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/RateLimit-Limit'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/RateLimit-Reset'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/RateLimit-Remaining'
+        '500':
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '504':
+          description: "Gateway Timeout"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+tags:
+  - name: vsystem
+    description: |
+      These endpoints should only be called by vsystem. The endpoints are defined in the
+      application manifest.
+  - name: private
+    description: |
+      These endpoints should only be called by dev-support and must not be used programmatically.
+      Expect them to change or be removed at any time!
+  - name: task
+    description: |
+      These endpoints are used to manage event ingestion tasks. Note that the APIs are tenant
+      specific.
+  - name: batch
+    description: |
+      These endpoints are used to manage batches for event ingestion tasks. Note that the APIs
+      are tenant specific.
+components:
+  securitySchemes:
+    policyCheck:
+      type: apiKey
+      in: header
+      name: X-Vsystem-Authinfo
+  headers:
+    RateLimit-Limit:
+      description: "Maximum allowed number of requests per second"
+      schema:
+        type: number
+      example: 10
+    RateLimit-Reset:
+      description: "Fraction of seconds before the rate limit resets"
+      schema:
+        type: number
+      example: 0.1
+    RateLimit-Remaining:
+      description: "Remaining requests this second"
+      schema:
+        type: number
+      example: 0
+  parameters:
+    sapPassport-header:
+      name: Sap-Passport
+      in: header
+      description: |
+        SAP Passport is a correlation mechanism. The target is to correlate uniquely requests
+        and message artefacts to end-to-end request and message flows. Navigate to the technology
+        guideline for the specification: <a href='https://github.tools.sap/CentralEngineering/TechnologyGuidelines/tree/latest/tg11'>TG11</a>.
+
+        The SAP Passport will be propagated to related internal and external requests.
+      required: true
+      schema:
+        type: string
+    tenantId-header:
+      name: X-Datahub-Tenant
+      in: header
+      description: |
+        The vsystem tenant that originated the request. This will be propagated to related internal requests.
+      required: true
+      schema:
+        $ref: "#/components/schemas/tenantId"
+    userId-header:
+      name: X-Datahub-User
+      in: header
+      description: |
+        The vsystem user that originated the request. This will be propagated to related internal requests.
+      required: true
+      schema:
+        $ref: "#/components/schemas/userId"
+    rmsTaskId-query:
+      name: rmsTaskId
+      in: query
+      description: |
+        The RMS Task ID that was used to create the subscription.
+      required: false
+      schema:
+        $ref: "#/components/schemas/rmsTaskId"
+    batchType-query:
+      name: batchType
+      in: query
+      description: |
+        The Batch Type of the batch.
+      schema:
+        $ref: "#/components/schemas/batchType"
+    taskId-path:
+      name: taskId
+      in: path
+      description: |
+        The Task ID that was created for the subscription.
+      required: true
+      schema:
+        $ref: "#/components/schemas/taskId"
+    batchId-path:
+      name: batchId
+      in: path
+      description: |
+        The Batch ID that was created for the subscription.
+      required: true
+      schema:
+        $ref: "#/components/schemas/batchId"
+  schemas:
+    tenantId:
+      type: string
+      example: "default"
+    userId:
+      type: string
+      example: "user"
+    loglevel:
+      type: string
+      enum: [debug, info, warning, error]
+      example: "debug"
+    businessObjectName:
+      type: string
+      example: "ExpenseReport"
+      description: |
+        <a href='https://github.tools.sap/CentralEngineering/sap-event-specification#businessobjectname'>SAP Event Specification for a business object name</a>.
+    businessObjectDomainName:
+      type: string
+      example: "sap.concur.expense"
+      description: |
+        <a href='https://github.tools.sap/CentralEngineering/sap-event-specification#domainnamespace'>SAP Event Specification for a domain namespace</a>.
+    loadType:
+      type: string
+      description: |
+        The load type when create tachyon task.
+      enum: ["initial",""]
+      example: "initial"
+    rmsTaskId:
+      type: string
+      format: uuid
+      description: |
+        The RMS replication task ID.
+    ccmConnectionId:
+      type: string
+      format: uuid
+      description: |
+        The CCM connection ID.
+    taskId:
+      type: string
+      format: uuid
+      description: |
+        The internal task ID.
+    batchId:
+      type: string
+      format: uuid
+      description: |
+        The internal batch ID.
+    batchType:
+      type: string
+      enum: [ export, delta ]
+      description: |
+        The batch type.
+    batchStatus:
+      type: string
+      enum: [ pending, running, created, failed, rejected, committed, released ]
+      example: "committed"
+      description: |
+        The batch status. The following values are returned for the status of an export batch:
+          * `pending` - export for batch has been requested but not started (see: `exportDelayMinutes`).
+          * `running` - export for batch has started but not yet completed (see: `exportCompletionPercent`).
+          * `created` - export for batch has completed (see: `exportManifestLocation` or `exportManifestURI`).
+          * `failed`  - export for batch has failed.
+
+        The following values are returned for the status of a delta batch:
+          * `created` - a batch was created and its contents is returned (see: `data`). Note: a batch could
+                        be empty. This is not an error.
+
+        The following values can be provided when updating the status of a batch:
+          * `rejected`  - the batch couldn't be processed due to a permanent error.
+          * `released`  - the batch couldn't be processed due to a temporary error and should be retried.
+          * `committed` - the batch was processed successfully.
+    exportDelayMinutes:
+      type: integer
+      minimum: 0
+      example: 60
+      description: |
+        The number of minutes it may take before the source is able to start exporting the data counted from
+        when the export was requested (i.e. this is a constant value).
+    exportCompletionPercent:
+      type: integer
+      minimum: 0
+      maximum: 100
+      description: |
+        The completion percentage of the data export.
+    exportManifestURI:
+      type: string
+      example: s3://my-bucket/path/to/export/export_manifest.json
+      description: |
+        The manifest file location for the export. The manifest file is a JSONL formatted file
+        listing all the data files that are part of the export.
+    exportManifestLocation:
+      type: string
+      example: https://lob.sap.com/hdl/us-west-2/sap.concur.expense/68E1C811-AE78-4C21-AE80-3194395828D2/ExpenseReport/manifest.jsonl
+      description: |
+        The manifest file location for the export. The manifest file is a JSONL formatted file
+        listing all the data files that are part of the export.
+    errorDetail:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    errorResponse:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: object
+          required:
+            - code
+            - message
+            - details
+            - status
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            target:
+              type: string
+            details:
+              type: array
+              items:
+                $ref: "#/components/schemas/errorDetail"
+            status:
+              type: integer
+    versionResponse:
+      type: object
+      required:
+        - version
+        - hash
+        - build
+      properties:
+        version:
+          type: string
+          example: "2206.3.0"
+        hash:
+          type: string
+          example: "c10d7c46113ba665ea930125a17436af95b48006"
+        build:
+          type: string
+          example: "release"
+    eventPostPayload:
+      properties:
+        name:
+          type: string
+        scope:
+          type: object
+          properties:
+            kind:
+              type: string
+            tenant:
+              type: string
+            user:
+              type: string
+          required:
+            - kind
+        body:
+          type: object
+        metadata:
+          type: object
+      required:
+        - name
+    loglevelResponse:
+      type: object
+      required:
+        - level
+      properties:
+        level:
+          $ref: "#/components/schemas/loglevel"
+    loglevelPutPayload:
+      type: object
+      required:
+        - level
+      properties:
+        level:
+          $ref: "#/components/schemas/loglevel"
+    taskPostPayload:
+      required:
+        - rmsTaskId
+        - connectionId
+        - businessObjectDomainName
+        - businessObjectName
+        - loadType
+      properties:
+        rmsTaskId:
+          $ref: "#/components/schemas/rmsTaskId"
+        connectionId:
+          $ref: "#/components/schemas/ccmConnectionId"
+        businessObjectDomainName:
+          $ref: "#/components/schemas/businessObjectDomainName"
+        businessObjectName:
+          $ref: "#/components/schemas/businessObjectName"
+        loadType:
+          $ref: "#/components/schemas/loadType"
+    taskLinks:
+      type: object
+      required:
+        - self
+        - batch
+      properties:
+        self:
+          type: string
+          example: "/app/tachyon-service/api/v1/tasks/3fa85f64-5717-4562-b3fc-2c963f66afa6"
+        batch:
+          type: string
+          example: "/app/tachyon-service/api/v1/tasks/3fa85f64-5717-4562-b3fc-2c963f66afa6/batches/"
+    taskModel:
+      allOf:
+        - type: object
+          required:
+            - taskId
+          properties:
+            taskId:
+              $ref: "#/components/schemas/taskId"
+            _links:
+              $ref: "#/components/schemas/taskLinks"
+        - $ref: '#/components/schemas/taskPostPayload'
+    taskModelArray:
+      type: object
+      required:
+        - value
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/taskModel'
+    batchPostPayload:
+      required:
+        - batchType
+      properties:
+        batchType:
+          $ref: "#/components/schemas/batchType"
+    batchPutPayload:
+      required:
+        - status
+      properties:
+        status:
+          $ref: "#/components/schemas/batchStatus"
+    batchModel:
+      allOf:
+        - type: object
+          required:
+            - taskId
+            - batchId
+            - exportDelayMinutes
+            - exportCompletionPercent
+            - exportManifestURI
+            - exportManifestLocation
+          properties:
+            taskId:
+              $ref: "#/components/schemas/taskId"
+              example: 123e4567-e89b-12d3-a456-426652340000
+            batchId:
+              $ref: "#/components/schemas/batchId"
+              example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            exportDelayMinutes:
+              $ref: "#/components/schemas/exportDelayMinutes"
+            exportCompletionPercent:
+              $ref: "#/components/schemas/exportCompletionPercent"
+            exportManifestURI:
+              $ref: "#/components/schemas/exportManifestURI"
+            exportManifestLocation:
+              $ref: "#/components/schemas/exportManifestLocation"
+        - $ref: '#/components/schemas/batchPostPayload'
+        - $ref: '#/components/schemas/batchPutPayload'
+    batchLinks:
+      type: object
+      required:
+        - self
+        - task
+      properties:
+        self:
+          type: string
+          example: "/app/tachyon-service/api/v1/tasks/3fa85f64-5717-4562-b3fc-2c963f66afa6/batches/123e4567-e89b-12d3-a456-426652340000"
+        task:
+          type: string
+          example: "/app/tachyon-service/api/v1/tasks/3fa85f64-5717-4562-b3fc-2c963f66afa6"
+    batchResponse:
+      allOf:
+        - type: object
+          properties:
+            _links:
+              $ref: '#/components/schemas/batchLinks'
+        - $ref: '#/components/schemas/batchModel'
+    batchResponseArray:
+      type: object
+      required:
+        - value
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/batchResponse'
+    batchWithDataResponse:
+      allOf:
+        - $ref: '#/components/schemas/batchResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                type: string
+                example: "{}"
+  requestBodies:
+    loglevelPut:
+      description: |
+        Provides the following fields as `JSON` payload:
+
+        <dl>
+          <dt><b>level*</b></dt>
+          <dd>The desired loglevel (one of `debug`, `info`, `warning`, `error`)</dd>
+          </dd>
+        </dl>
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/loglevelPutPayload'
+    eventPost:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/eventPostPayload'
+    taskPost:
+      description: |
+        Provides the following fields as `JSON` payload:
+
+        <dl>
+          <dt><b>rmsTaskId*</b></dt>
+          <dd>The replication task ID in RMS. This can be used to query the tasks later on and
+            is used by Event Ingestion Service to trigger RMS to reschedule the transfer when
+            a high-water-mark is reached.</dd>
+          <dt><b>connectionId*</b></dt>
+          <dd>The CCM connection ID in RMS. This can be used to retrieve the Event Mesh and
+            LOB API connection details from Central Connection Management.</dd>
+          <dd>The tenant information per
+            <a href='https://github.tools.sap/CentralEngineering/sap-event-specification#source'>SAP Event Specification for source</a>.</dd>
+          <dt><b>businessObjectDomainName*</b></dt>
+          <dd>The Business Object Domain Name per <a href='https://github.tools.sap/CentralEngineering/sap-event-specification#domainnamespace'>SAP Event Specification for domain namespace</a>.</dd>
+          <dt><b>businessObjectName*</b></dt>
+          <dd>The Business Object Name per <a href='https://github.tools.sap/CentralEngineering/sap-event-specification#businessobjectname'>SAP Event Specification for a business object name</a>.</dd>
+          <dt><b>loadType*</b></dt>
+          <dd>The load type for the tachyon task</dd>
+        </dl>
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/taskPostPayload'
+    batchPost:
+      description: |
+        Provides the following fields as `JSON` payload:
+
+        <dl>
+          <dt><b>batchType*</b></dt>
+          <dd>Create a batch with the provided type (either `export` or `delta`).</dd>
+        </dl>
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/batchPostPayload'
+    batchPut:
+      description: |
+        Provides the following fields as `JSON` payload:
+
+        <dl>
+          <dt><b>batchStatus*</b></dt>
+          <dd>Update the batch with the provided status (either `committed`, `rejected` or `released`).</dd>
+        </dl>
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/batchPutPayload'
+# © 2022 SAP SE or an SAP affiliate company. All rights reserved.

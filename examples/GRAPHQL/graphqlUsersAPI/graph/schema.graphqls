@@ -1,0 +1,43 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+
+scalar Time
+
+type Attachment{
+	Id: ID!
+	Name: String!
+	Date: Time!
+	Contents: String!
+}
+
+type Task {
+	Id: ID!
+	Text: String!
+	Tags: [String!]
+	Due: Time!
+	Attachments: [Attachment!]
+}
+
+type Query {
+	getTasks: [Task]
+	getAttachments:[Attachment]
+}
+
+input NewTask {
+	Text: String!
+	Tags: [String!]
+	Due: Time!
+	Attchment:NewAttachment!
+}
+
+input NewAttachment{
+	Name: String!
+	Date: Time!
+	Contents: String!
+}
+
+type Mutation {
+	createTask(input: NewTask!): Task!
+	createAttachment(input:NewAttachment):Attachment!
+}

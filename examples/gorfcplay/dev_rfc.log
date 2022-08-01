@@ -1,0 +1,76 @@
+
+**** Log file opened at 2021-04-08 12:01:23.361082 UTC+08:00 (GMT), Encoding UTF-8
+NW RFC Library: SDK variant, Release 770 Patch Level 3, Compiled on Dec 11 2020 19:28:09
+ CPIC library: 777.2020.10.14 version 3, NI library: 40, Kernel Release: 777 Patch Level 316
+ Current working directory: /home/vagrant/advanced-go-programming-book/examples/gorfcplay, Program: main
+ Hardware: AMD/Intel x86_64 with Linux x86_64, Operating_system: Linux 4.15.0-43-generic
+ Hostname: ubuntu1804.localdomain, IP address: 127.0.0.1, IPv6 address: fe80::20c:29ff:feb2:26ab
+
+2021-04-08 12:01:23.362224 [140164051183552] >> Info entry
+	Did not find config file /home/vagrant/advanced-go-programming-book/examples/gorfcplay/sapnwrfc.ini.
+
+**** Log file opened at 2021-04-08 13:58:31.959760 UTC+08:00 (GMT), Encoding UTF-8
+NW RFC Library: SDK variant, Release 770 Patch Level 3, Compiled on Dec 11 2020 19:28:09
+ CPIC library: 777.2020.10.14 version 3, NI library: 40, Kernel Release: 777 Patch Level 316
+ Current working directory: /home/vagrant/advanced-go-programming-book/examples/gorfcplay, Program: __debug_bin
+ Hardware: AMD/Intel x86_64 with Linux x86_64, Operating_system: Linux 4.15.0-43-generic
+ Hostname: ubuntu1804.localdomain, IP address: 127.0.0.1, IPv6 address: fe80::20c:29ff:feb2:26ab
+
+2021-04-08 13:58:31.962645 [139913472255744] >> Error entry
+	[Handle: 139913190294640	ConvID: 00000001	Socket: 1	Handle: 139913190335520	Host: ccf-715-api.wdf.sap.corp	Port: 443	Websocket Host: ccf-715-api.wdf.sap.corp	Websocket Port: 443	User: 	Mandant: 715	Language: 	Codepage: 4103]
+	RfcABAPMessageException: Key: , Code: RFC_ABAP_MESSAGE, Message: Name or password is incorrect (repeat logon)
+
+**** Log file opened at 2021-04-08 14:05:11.061099 UTC+08:00 (GMT), Encoding UTF-8
+NW RFC Library: SDK variant, Release 770 Patch Level 3, Compiled on Dec 11 2020 19:28:09
+ CPIC library: 777.2020.10.14 version 3, NI library: 40, Kernel Release: 777 Patch Level 316
+ Current working directory: /home/vagrant/advanced-go-programming-book/examples/gorfcplay, Program: __debug_bin
+ Hardware: AMD/Intel x86_64 with Linux x86_64, Operating_system: Linux 4.15.0-43-generic
+ Hostname: ubuntu1804.localdomain, IP address: 127.0.0.1, IPv6 address: fe80::20c:29ff:feb2:26ab
+
+2021-04-08 14:05:11.061377 [140292409992960] >> Error entry
+	[Handle: 140292019831536	ConvID: 00000001	Socket: 1	Handle: 140292019872416	Host: ccf-715-api.wdf.sap.corp	Port: 443	Websocket Host: ccf-715-api.wdf.sap.corp	Websocket Port: 443	User: 	Mandant: 715	Language: 	Codepage: 4103]
+	RfcABAPMessageException: Key: , Code: RFC_ABAP_MESSAGE, Message: Name or password is incorrect (repeat logon)
+
+**** Log file opened at 2021-04-08 16:04:19.438092 UTC+08:00 (GMT), Encoding UTF-8
+NW RFC Library: SDK variant, Release 770 Patch Level 3, Compiled on Dec 11 2020 19:28:09
+ CPIC library: 777.2020.10.14 version 3, NI library: 40, Kernel Release: 777 Patch Level 316
+ Current working directory: /home/vagrant/advanced-go-programming-book/examples/gorfcplay, Program: __debug_bin
+ Hardware: AMD/Intel x86_64 with Linux x86_64, Operating_system: Linux 4.15.0-43-generic
+ Hostname: ubuntu1804.localdomain, IP address: 127.0.0.1, IPv6 address: fe80::20c:29ff:feb2:26ab
+
+2021-04-08 16:04:19.438366 [139965400872704] >> Error entry
+	[Handle: 139965266772656	ConvID: 85862458	Target: ldcists.devint.net.sap	SysID: STS	SysNr: 11	User: 	Mandant: 800	Language: 	Codepage: 4103]
+	RfcSystemException: Key: CALL_FUNCTION_SIGNON_INCOMPL, Code: RFC_ABAP_RUNTIME_FAILURE, Message: Logon data incomplete.
+
+**** Log file opened at 2021-04-08 16:07:37.761134 UTC+08:00 (GMT), Encoding UTF-8
+NW RFC Library: SDK variant, Release 770 Patch Level 3, Compiled on Dec 11 2020 19:28:09
+ CPIC library: 777.2020.10.14 version 3, NI library: 40, Kernel Release: 777 Patch Level 316
+ Current working directory: /home/vagrant/advanced-go-programming-book/examples/gorfcplay, Program: __debug_bin
+ Hardware: AMD/Intel x86_64 with Linux x86_64, Operating_system: Linux 4.15.0-43-generic
+ Hostname: ubuntu1804.localdomain, IP address: 127.0.0.1, IPv6 address: fe80::20c:29ff:feb2:26ab
+
+2021-04-08 16:07:37.764727 [139797609478080] >> Error entry
+	[Handle: 34204256	ConvID: 86083831	Target: ldcists.devint.net.sap	SysID: STS	SysNr: 11	User: 	Mandant: 800	Language: 	Codepage: 4103]
+	RfcSystemException: Key: CALL_FUNCTION_SIGNON_INCOMPL, Code: RFC_ABAP_RUNTIME_FAILURE, Message: Logon data incomplete.
+
+**** Log file opened at 2021-04-08 16:10:08.588595 UTC+08:00 (GMT), Encoding UTF-8
+NW RFC Library: SDK variant, Release 770 Patch Level 3, Compiled on Dec 11 2020 19:28:09
+ CPIC library: 777.2020.10.14 version 3, NI library: 40, Kernel Release: 777 Patch Level 316
+ Current working directory: /home/vagrant/advanced-go-programming-book/examples/gorfcplay, Program: __debug_bin
+ Hardware: AMD/Intel x86_64 with Linux x86_64, Operating_system: Linux 4.15.0-43-generic
+ Hostname: ubuntu1804.localdomain, IP address: 127.0.0.1, IPv6 address: fe80::20c:29ff:feb2:26ab
+
+2021-04-08 16:10:08.588919 [139712350779136] >> Error entry
+	[Handle: 139712199247056	ConvID: 86261663	Target: ldcists.devint.net.sap	SysID: STS	SysNr: 11	User: 	Mandant: 800	Language: 	Codepage: 4103]
+	RfcSystemException: Key: CALL_FUNCTION_SIGNON_INCOMPL, Code: RFC_ABAP_RUNTIME_FAILURE, Message: Logon data incomplete.
+
+**** Log file opened at 2021-04-08 17:13:24.249202 UTC+08:00 (GMT), Encoding UTF-8
+NW RFC Library: SDK variant, Release 770 Patch Level 3, Compiled on Dec 11 2020 19:28:09
+ CPIC library: 777.2020.10.14 version 3, NI library: 40, Kernel Release: 777 Patch Level 316
+ Current working directory: /home/vagrant/advanced-go-programming-book/examples/gorfcplay, Program: __debug_bin
+ Hardware: AMD/Intel x86_64 with Linux x86_64, Operating_system: Linux 4.15.0-43-generic
+ Hostname: ubuntu1804.localdomain, IP address: 127.0.0.1, IPv6 address: fe80::20c:29ff:feb2:26ab
+
+2021-04-08 17:13:24.249505 [140189517449152] >> Error entry
+	[Handle: 31837136	ConvID: 90481371	Target: ldcists.devint.net.sap	SysID: STS	SysNr: 11	User: 	Mandant: 800	Language: 	Codepage: 4103]
+	RfcSystemException: Key: CALL_FUNCTION_SIGNON_INCOMPL, Code: RFC_ABAP_RUNTIME_FAILURE, Message: Logon data incomplete.

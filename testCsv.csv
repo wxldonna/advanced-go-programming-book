@@ -1,0 +1,20 @@
+Test Scenario,Test Characteristic,Release,Date,Take Time [ns],MemoryUsed [B/op],Memory Allocated Times [allocs/op]
+String,String,String,String,Double,Double,Double
+BenchmarkConverterCSV,all_types-4,2212.3.0,2022.05.16 04:15:25,5442380,1050580,14012
+BenchmarkConverterCSV,extreme_decimal_values-4,2212.3.0,2022.05.16 04:15:25,1094048,546321,1012
+BenchmarkConverterJSONRecords,all_types-4,2212.3.0,2022.05.16 04:15:25,23446600,4195520,95017
+BenchmarkConverterJSONRecords,extreme_decimal_values-4,2212.3.0,2022.05.16 04:15:25,8923750,1640407,37013.3
+BenchmarkConverterJSONValues,all_types-4,2212.3.0,2022.05.16 04:15:25,10455400,2034030,38014
+BenchmarkConverterJSONValues,extreme_decimal_values-4,2212.3.0,2022.05.16 04:15:25,4005260,827257,19012
+BenchmarkConverterJSONLines,all_types-4,2212.3.0,2022.05.16 04:15:25,23141812,4195525,95017
+BenchmarkConverterJSONLines,extreme_decimal_values-4,2212.3.0,2022.05.16 04:15:25,9080150,1640410,37013.7
+BenchmarkConverterParquetSnappy,all_types-4,2212.3.0,2022.05.16 04:15:25,36670400,7350990,172402
+BenchmarkConverterParquetSnappy,extreme_decimal_values-4,2212.3.0,2022.05.16 04:15:25,70916082,50385600,147517
+BenchmarkConverterParquetUncompressed,all_types-4,2212.3.0,2022.05.16 04:15:25,34732100,7760070,172327
+BenchmarkConverterParquetUncompressed,extreme_decimal_values-4,2212.3.0,2022.05.16 04:15:25,68824600,50596000,147494
+BenchmarkConverterParquetGZIP,all_types-4,2212.3.0,2022.05.16 04:15:25,40381059,10066055,172538
+BenchmarkConverterParquetGZIP,extreme_decimal_values-4,2212.3.0,2022.05.16 04:15:25,72197513,54313500,147612
+BenchmarkConverterHana,all_types-4,2212.3.0,2022.05.16 04:15:25,4812340,1000580,30001
+BenchmarkConverterHana,extreme_decimal_values-4,2212.3.0,2022.05.16 04:15:25,86250900,33077700,100070
+BenchmarkConverterAvro,all_types-4,2212.3.0,2022.05.16 04:15:25,48266883,13457100,206569
+BenchmarkConverterAvro,extreme_decimal_values-4,2212.3.0,2022.05.16 04:15:25,76234418,56090884,270750

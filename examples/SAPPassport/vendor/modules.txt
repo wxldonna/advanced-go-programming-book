@@ -1,0 +1,7 @@
+# github.com/google/uuid v1.3.0
+github.com/google/uuid
+# github.wdf.sap.corp/velocity/passport/v5 v5.0.0
+## explicit
+github.wdf.sap.corp/velocity/passport/v5
+# github.wdf.sap.corp/velocity/trc v0.0.4
+github.wdf.sap.corp/velocity/trc

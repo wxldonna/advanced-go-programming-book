@@ -1,0 +1,43 @@
+{
+    "version": 1,
+    "jobs": [{
+        "name": "go-test",
+        "type": "docker",
+        "docker_file": "infrabox/go-test/Dockerfile",
+        "build_only": false,
+        "build_context": ".",
+        "resources": { "limits": { "memory": 1024, "cpu": 1 } },
+        "cache": { "data": false, "image": true },
+        "repository": { "clone": true, "full_history": false }
+    },
+    {
+        "name": "gofmt",
+        "type": "docker",
+        "docker_file": "infrabox/gofmt/Dockerfile",
+        "build_only": false,
+        "build_context": ".",
+        "resources": { "limits": { "memory": 1024, "cpu": 1 } },
+        "cache": { "data": false, "image": true },
+        "repository": { "clone": true, "full_history": false }
+    },
+    {
+      "name": "copyright-compliance-check",
+      "type": "docker-image",
+      "image": "docker.wdf.sap.corp:51021/com.sap.velocity-infra/infrabox-source-compliance-scan:1.0.9",
+      "repository": {
+        "clone": true,
+        "full_history": false
+      },
+      "environment": {
+        "GITHUB_TOKEN": {
+          "$secret": "GITHUB_API_TOKEN"
+        }
+      },
+      "resources": {
+        "limits": {
+          "memory": 1024,
+          "cpu": 1
+        }
+      }
+    }]
+}

@@ -1,0 +1,13 @@
+{
+    "version": 1,
+    "jobs": [{
+        "name": "go-test",
+        "type": "docker",
+        "docker_file": "infrabox/go-test/Dockerfile",
+        "build_only": false,
+        "build_context": ".",
+        "resources": { "limits": { "memory": 1024, "cpu": 1 } },
+        "cache": { "data": false, "image": true },
+        "repository": { "clone": true, "full_history": false }
+    }]
+}

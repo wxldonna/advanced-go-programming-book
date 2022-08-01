@@ -1,0 +1,7 @@
+package: openapi3
+generate:
+  gorilla-server: true
+  models: true
+output: ./server.gen.go
+compatibility:
+  old-merge-schemas: true

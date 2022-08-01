@@ -1,0 +1,18 @@
+Test Scenario,Test Characteristic,Release,Date,Take Time [ns],MemoryUsed [B/op],Memory Allocated Times [allocs/op]
+String,String,String,String,Double,Double,Double
+BenchmarkConverterCSV,all_types-4,2211.2.0,2022.04.01 11:22:45,3335408,1050583,14012
+BenchmarkConverterCSV,extreme_decimal_values-4,2211.2.0,2022.04.24 11:22:45,716186,546320,1012
+BenchmarkConverterJSONRecords,all_types-4,2211.2.0,2022.04.24 11:22:45,14497113,4195513,95017
+BenchmarkConverterJSONRecords,extreme_decimal_values-4,2211.2.0,2022.04.24 11:22:45,5369520,1640389,37013
+BenchmarkConverterJSONValues,all_types-4,2211.2.0,2022.04.24 11:22:45,6416653,2034021,38014
+BenchmarkConverterJSONValues,extreme_decimal_values-4,2211.2.0,2022.04.24 11:22:45,2439233,827255,19012
+BenchmarkConverterJSONLines,all_types-4,2211.2.0,2022.04.24 11:22:45,14973267,4195520,95017
+BenchmarkConverterJSONLines,extreme_decimal_values-4,2211.2.0,2022.04.24 11:22:45,5809808,1640391,37013
+BenchmarkConverterParquetSnappy,all_types-4,2211.2.0,2022.04.24 11:22:45,21046828,7350732,172400
+BenchmarkConverterParquetSnappy,extreme_decimal_values-4,2211.2.0,2022.04.24 11:22:45,44748324,50385227,147514
+BenchmarkConverterParquetUncompressed,all_types-4,2211.2.0,2022.04.24 11:22:45,23272048,7759920,172327
+BenchmarkConverterParquetUncompressed,extreme_decimal_values-4,2211.2.0,2022.04.24 11:22:45,78704477,50596079,147496
+BenchmarkConverterParquetGZIP,all_types-4,2211.2.0,2022.04.24 11:22:45,25845034,10018683,172538
+BenchmarkConverterParquetGZIP,extreme_decimal_values-4,2211.2.0,2022.04.24 11:22:45,53946861,54064975,147609
+BenchmarkConverterHana,all_types-4,2211.2.0,2022.04.24 11:22:45,2738049,1000580,30001
+BenchmarkConverterHana,extreme_decimal_values-4,2211.2.0,2022.04.24 11:22:45,62217557,33075436,100064
